@@ -6,6 +6,7 @@ import { FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import * as Animatable from 'react-native-animatable';
 
 //components
 import Loading from './LoadingComponent';
@@ -59,27 +60,39 @@ class About extends Component {
     if (this.props.partners.errMess) {
       return (
         <ScrollView style={{ marginBottom: 20 }}>
-          <Mission />
-          <Card
-            title='Community Partners'>
-            <Text>{this.props.partners.errMess}</Text>
-          </Card>
+          <Animatable.View
+            animation='fadeInDown'
+            duration={2000}
+            delay={1000}
+          >
+            <Mission />
+            <Card
+              title='Community Partners'>
+              <Text>{this.props.partners.errMess}</Text>
+            </Card>
+          </Animatable.View>
         </ScrollView>
       );
     }
     return (
       <ScrollView style={{ marginBottom: 20 }}>
-        <Mission />
-        <Card
-          title='Community Partners'
+        <Animatable.View
+          animation='fadeInDown'
+          duration={2000}
+          delay={1000}
         >
-          <FlatList
-            data={this.props.partners.partners}
-            renderItem={renderPartner}
-            keyExtractor={item => item.id.toString()}
+          <Mission />
+          <Card
+            title='Community Partners'
           >
-          </FlatList>
-        </Card>
+            <FlatList
+              data={this.props.partners.partners}
+              renderItem={renderPartner}
+              keyExtractor={item => item.id.toString()}
+            >
+            </FlatList>
+          </Card>
+        </Animatable.View>
       </ScrollView>
     );
   }

@@ -5,6 +5,7 @@ import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import * as Animatable from 'react-native-animatable';
 
 //actionCreators
 import { deleteFavorite } from '../redux/ActionCreators';
@@ -31,11 +32,11 @@ class Favorites extends Component {
 
   static navigationOptions = {
     title: 'My Favorites'
-  } 
+  }
 
   render() {
     const { navigate } = this.props.navigation;
-    const renderFavoriteItem = ({item}) => {
+    const renderFavoriteItem = ({ item }) => {
       return (
         <SwipeRow
           rightOpenValue={-100}
@@ -44,7 +45,7 @@ class Favorites extends Component {
           <View style={styles.deleteView}>
             <TouchableOpacity
               style={styles.deleteTouchable}
-              onPress={() => 
+              onPress={() =>
                 Alert.alert(
                   'Delete Favorite?',
                   'Are you sure you wish to delete the favorite campsite ' + item.name + '?',
@@ -71,8 +72,8 @@ class Favorites extends Component {
             <ListItem
               title={item.name}
               subtitle={item.description}
-              leftAvatar={{source: {uri: baseUrl + item.image}}}
-              onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}
+              leftAvatar={{ source: { uri: baseUrl + item.image } }}
+              onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
             />
           </View>
         </SwipeRow>
@@ -83,20 +84,25 @@ class Favorites extends Component {
       return <Loading />
     }
     if (this.props.campsites.errMess) {
-      return(
+      return (
         <View>
           <Text>{this.props.campsites.errMess}</Text>
         </View>
       )
     }
-    return(
-      <FlatList
-        data={this.props.campsites.campsites.filter(
-          campsite => this.props.favorites.includes(campsite.id)
-        )}
-        renderItem={renderFavoriteItem}
-        keyExtractor={item => item.id.toString()}
-      />
+    return (
+      <Animatable.View
+        animation='fadeInRightBig'
+        duration={1000}
+      >
+        <FlatList
+          data={this.props.campsites.campsites.filter(
+            campsite => this.props.favorites.includes(campsite.id)
+          )}
+          renderItem={renderFavoriteItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      </Animatable.View>
     )
   }
 }
